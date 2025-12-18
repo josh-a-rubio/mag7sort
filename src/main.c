@@ -16,8 +16,7 @@ void merge_sort(Stock mag7[], int left, int right);
 void merge(Stock mag7[], int left, int mid, int right);
 void data_present(const Stock mag7[], int count);
 
-int main(void)
-{
+int main(void) {
     Stock mag7[STOCKS];
 
     data_setup(mag7, STOCKS);
@@ -55,7 +54,43 @@ void merge_sort(Stock mag7[], int left, int right) {
 
 //Merge helper
 void merge(Stock mag7[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    Stock leftArr[n1];
+    Stock rightArr[n2];
+
+    for (int i = 0; i < n1; i++)
+        leftArr[i] = mag7[left + i];
     
+    for (int j = 0; j < n2; j++)
+        rightArr[j] = mag7[mid + 1 + j];
+
+    int i = 0;
+    int j = 0;
+    int k = left;
+
+    while (i < n1 && j < n2){
+        if (leftArr[i].price >= rightArr[j].price){
+            mag7[k] = leftArr[i];
+            i++;
+        } else {
+            mag7[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        mag7[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        mag7[k] = rightArr[j];
+        j++;
+        k++;
+    }
 
 }
 
