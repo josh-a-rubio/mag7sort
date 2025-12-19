@@ -41,13 +41,20 @@ int main(void) {
 void data_setup(Stock mag7[], int count) {
     if (count < 7) return;
 
-    strcpy(mag7[0]. ticker, "MSFT"); mag7[0].price = 299.10; mag7[0].percentGain = -1.2; mag7[0].marketCap = 2.45;
-    strcpy(mag7[1]. ticker, "AAPL"); mag7[1].price = 207.30; mag7[1].percentGain = 2.8; mag7[1].marketCap = 1.2;
-    strcpy(mag7[2]. ticker, "TSLA"); mag7[2].price = 174.50; mag7[2].percentGain = -4.5; mag7[2].marketCap = 9.0;
-    strcpy(mag7[3]. ticker, "GOOGL"); mag7[3].price = 131.20; mag7[3].percentGain = 1.4; mag7[3].marketCap = 3.3;
-    strcpy(mag7[4]. ticker, "AMZN"); mag7[4].price = 102.00; mag7[4].percentGain = 1.9; mag7[4].marketCap = 4.0;
-    strcpy(mag7[5]. ticker, "META"); mag7[5].price = 184.60; mag7[5].percentGain = -0.2; mag7[5].marketCap = 3.2;
-    strcpy(mag7[6]. ticker, "NVDA"); mag7[6].price = 441.00; mag7[6].percentGain = 6.9; mag7[6].marketCap = 9.9;
+    strcpy(mag7[0]. ticker, "MSFT"); mag7[0].price = 299.10; 
+    mag7[0].percentGain = -1.2; mag7[0].marketCap = 2.45;
+    strcpy(mag7[1]. ticker, "AAPL"); mag7[1].price = 207.30;
+    mag7[1].percentGain = 2.8; mag7[1].marketCap = 1.2;
+    strcpy(mag7[2]. ticker, "TSLA"); mag7[2].price = 174.50;
+    mag7[2].percentGain = -4.5; mag7[2].marketCap = 9.0;
+    strcpy(mag7[3]. ticker, "GOOGL"); mag7[3].price = 131.20;
+    mag7[3].percentGain = 1.4; mag7[3].marketCap = 3.3;
+    strcpy(mag7[4]. ticker, "AMZN"); mag7[4].price = 102.00;
+    mag7[4].percentGain = 1.9; mag7[4].marketCap = 4.0;
+    strcpy(mag7[5]. ticker, "META"); mag7[5].price = 184.60;
+    mag7[5].percentGain = -0.2; mag7[5].marketCap = 3.2;
+    strcpy(mag7[6]. ticker, "NVDA"); mag7[6].price = 441.00;
+    mag7[6].percentGain = 6.9; mag7[6].marketCap = 9.9;
     
 }
 
@@ -121,11 +128,11 @@ void data_present(const Stock mag7[], int count) {
     printf("+-------------------------------------------------+\n");
     printf("|"BOLD BLUE" MAG 7 — Market Snapshot End of Day - %s "RESET"|\n", dateStr);
     printf("+-------------------------------------------------+\n");
-    printf(BOLD "The Magnificent Seven are now worth %.2f trillion USD\n\n" RESET, totalMarketCap);
+    printf(BOLD "The Magnificent Seven are now worth %.2f trillion USD!\n\n" RESET, totalMarketCap);
 
     // Winner & Loser
     printf("+---------------------------------------+\n");
-    printf(BOLD WHITE "| Winner & Loser of the Day (By %% Gain) |\n" RESET);
+    printf("|"BOLD WHITE" Winner & Loser of the Day (By %% Gain) "RESET"|\n");
     printf("+---------------------------------------+\n");
 
     const char *winnerColor = (mag7[0].percentGain >= 0) ? GREEN : RED;
@@ -154,7 +161,7 @@ void data_present(const Stock mag7[], int count) {
 
     // Sorted list
     printf("+--------------------------------------------+\n");
-    printf(BOLD WHITE "| Sorted MAG 7 Stocks (Descending by %% Gain) |\n" RESET);
+    printf( "|"BOLD WHITE" Sorted MAG 7 Stocks (Descending by %% Gain) "RESET"|\n");
     printf("+--------------------------------------------+\n");
     printf("Rank | Ticker | Price   | Gain   | Market Cap \n");
     printf("---------------------------------------------\n");
