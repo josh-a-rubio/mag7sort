@@ -3,14 +3,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <sys/stat.h>
 
-#define RESET   "\033[0m"
-#define WHITE   "\033[37m"
-#define BLUE    "\033[34m"
-#define BOLD    "\033[1m"
-#define GREEN "\033[32m"
-#define RED   "\033[31m"
-
+#define DATA_FILE "mag7_data.csv"
 
 #define TICKER 6
 #define STOCKS 7
@@ -21,6 +16,13 @@ typedef struct Stock {
     double marketCap;
 } Stock;
 
+#define RESET   "\033[0m"
+#define WHITE   "\033[37m"
+#define BLUE    "\033[34m"
+#define BOLD    "\033[1m"
+#define GREEN "\033[32m"
+#define RED   "\033[31m"
+
 
 void data_setup(Stock mag7[], int count);
 void merge_sort(Stock mag7[], int left, int right);
@@ -28,6 +30,8 @@ void merge(Stock mag7[], int left, int mid, int right);
 void data_present(const Stock mag7[], int count);
 
 int main(void) {
+    freopen("/dev/null", "r", stdin);
+
     Stock mag7[STOCKS];
 
     data_setup(mag7, STOCKS);
@@ -37,25 +41,42 @@ int main(void) {
     return 0;
 
 }
+
 //Fetch mag7 EOD data
 void data_setup(Stock mag7[], int count) {
-    if (count < 7) return;
-
-    strcpy(mag7[0]. ticker, "MSFT"); mag7[0].price = 299.10; 
-    mag7[0].percentGain = -1.2; mag7[0].marketCap = 2.45;
-    strcpy(mag7[1]. ticker, "AAPL"); mag7[1].price = 207.30;
-    mag7[1].percentGain = 2.8; mag7[1].marketCap = 1.2;
-    strcpy(mag7[2]. ticker, "TSLA"); mag7[2].price = 174.50;
-    mag7[2].percentGain = -4.5; mag7[2].marketCap = 9.0;
-    strcpy(mag7[3]. ticker, "GOOGL"); mag7[3].price = 131.20;
-    mag7[3].percentGain = 1.4; mag7[3].marketCap = 3.3;
-    strcpy(mag7[4]. ticker, "AMZN"); mag7[4].price = 102.00;
-    mag7[4].percentGain = 1.9; mag7[4].marketCap = 4.0;
-    strcpy(mag7[5]. ticker, "META"); mag7[5].price = 184.60;
-    mag7[5].percentGain = -0.2; mag7[5].marketCap = 3.2;
-    strcpy(mag7[6]. ticker, "NVDA"); mag7[6].price = 441.00;
-    mag7[6].percentGain = 6.9; mag7[6].marketCap = 9.9;
+    printf("Fetching latest MAG7 data...\n");
     
+    int ret = system("./fetch-mag7 > /dev/null 2>&1");  
+    if (ret != 0) {
+        fprintf(stderr, "Error fetching MAG7 data!\n");
+        exit(1);  
+    }
+
+    FILE *fp = fopen(DATA_FILE, "r");
+    if (!fp) {
+        fprintf(stderr, "Failed to open %s\n", DATA_FILE);
+        exit(1);
+    }
+
+    char line[256];
+    fgets(line, sizeof(line), fp);
+    
+    for (int i = 0; i < count; i++) {
+        if (fscanf(
+            fp,
+            "%5[^,],%f,%f,%lf\n",
+            mag7[i].ticker,
+            &mag7[i].price,
+            &mag7[i].percentGain,
+            &mag7[i].marketCap
+        ) != 4) {
+            fprintf(stderr, "Malformed data in %s\n", DATA_FILE);
+            fclose(fp);
+            exit(1);
+        }
+    }
+    fclose(fp);
+
 }
 
 //Merge sort algo
@@ -125,9 +146,9 @@ void data_present(const Stock mag7[], int count) {
     }
 
     // Title box
-    printf("+-------------------------------------------------+\n");
-    printf("|"BOLD BLUE" MAG 7 — Market Snapshot End of Day - %s "RESET"|\n", dateStr);
-    printf("+-------------------------------------------------+\n");
+    printf("+-------------------------------------------+\n");
+    printf("|"BOLD BLUE" MAG 7 — Live Market Snapshot - %s "RESET"|\n", dateStr);
+    printf("+-------------------------------------------+\n");
     printf(BOLD "The Magnificent Seven are now worth %.2f trillion USD!\n\n" RESET, totalMarketCap);
 
     // Winner & Loser
@@ -139,7 +160,7 @@ void data_present(const Stock mag7[], int count) {
     const char *loserColor = (mag7[count-1].percentGain >= 0) ? GREEN : RED;
 
     printf(
-        "Winner:  %-6s | Price: %s%7.2f%s | Gain: %s%+5.1f%%%s\n",
+        "Winner:  %-6s | Price: %s%7.2f%s | Gain: %s%+6.2f%%%s\n",
         mag7[0].ticker,
         winnerColor,
         mag7[0].price,
@@ -149,7 +170,7 @@ void data_present(const Stock mag7[], int count) {
         RESET
     );
     printf(
-        "Loser:   %-6s | Price: %s%7.2f%s | Gain: %s%+5.1f%%%s\n\n", 
+        "Loser:   %-6s | Price: %s%7.2f%s | Gain: %s%+6.2f%%%s\n\n", 
         mag7[count-1].ticker,
         loserColor,
         mag7[count-1].price,
@@ -170,7 +191,7 @@ void data_present(const Stock mag7[], int count) {
         const char *gainColor = (mag7[i].percentGain >= 0) ? GREEN : RED;
 
         printf(
-            WHITE "%d" RESET "    | %-6s | %s%7.2f%s | %s%+5.1f%%%s | %.1fT\n", 
+            WHITE "%d" RESET "    | %-6s | %s%7.2f%s | %s%+6.2f%%%s | %.2fT\n", 
             i + 1,
             mag7[i].ticker,
             gainColor,
@@ -183,6 +204,7 @@ void data_present(const Stock mag7[], int count) {
         );
     }
     printf("\n");
+
 }
 
 
