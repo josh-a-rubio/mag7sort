@@ -104,13 +104,21 @@ Every exection fetches **fresh market data**, ensuring results are never stale.
 
 > The data fetcher is bundled as an executable.
 
+### Clone & Prepare
+
+```bash
+git clone https://github.com/yourname/mag7sort
+cd mag7sort/src
+chmod +x fetch-mag7
+```
+
 ### Build
 
 ```bash
 gcc -o mag7sort main.c
 ```
 
-Ensure the following files are in the same directory:
+Make sure the following files are in the same directory:
 - `mag7sort`
 - `fetch-mag7` (executable)
 
@@ -187,3 +195,4 @@ MIT License
 ## Author
 
 Josh A. Rubio
+
