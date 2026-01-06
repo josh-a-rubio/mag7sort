@@ -107,7 +107,7 @@ Every exection fetches **fresh market data**, ensuring results are never stale.
 ### Clone & Prepare
 
 ```bash
-git clone https://github.com/yourname/mag7sort
+git clone https://github.com/josh-a-rubio/mag7sort
 cd mag7sort/src
 chmod +x fetch-mag7
 ```
@@ -195,4 +195,5 @@ MIT License
 ## Author
 
 Josh A. Rubio
+
 
